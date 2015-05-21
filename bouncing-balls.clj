@@ -31,18 +31,30 @@
 (ns bouncing-balls.core)
 
 (defn bouncing-balls [h bounce window]
-  ; your code
-)
+  (if (>= window h)
+    -1
+    (loop [current (next-bounce h bounce) bounces 0]
+      (if (> current window)
+        (recur (next-bounce current bounce) (+' bounces 2))
+        (+' bounces 1)))))
 
-(ns bouncing-balls.core-test
-  (:require [clojure.test :refer :all]
-            [bouncing-balls.core :refer :all]))
 
-(deftest a-test1
-  (testing "Test 1"
-    (def rr 3)
-    (is (= (bouncing-balls 3 0.66 1.5) rr))))
-(deftest a-test2
-  (testing "Test 2"
-    (def rr 15)
-        (is (= (bouncing-balls 30 0.66 1.5) rr))))
+(defn next-bounce [h bounce] (*' h bounce))
+
+(bouncing-balls 10 1 10)
+
+(next-bounce 3 0.66)
+
+;;(ns bouncing-balls.core-test
+;;  (:require [clojure.test :refer :all]
+;;            [bouncing-balls.core :refer :all]))
+;;
+;;(deftest a-test1
+;;  (testing "Test 1"
+;;    (def rr 3)
+;;    (is (= (bouncing-balls 3 0.66 1.5) rr))))
+;;
+;;(deftest a-test2
+;;  (testing "Test 2"
+;;    (def rr 15)
+;;        (is (= (bouncing-balls 30 0.66 1.5) rr))))
