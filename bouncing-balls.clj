@@ -30,6 +30,8 @@
 
 (ns bouncing-balls.core)
 
+(defn next-bounce [h bounce] (*' h bounce))
+
 (defn bouncing-balls [h bounce window]
   (if (>= window h)
     -1
@@ -37,9 +39,6 @@
       (if (> current window)
         (recur (next-bounce current bounce) (+' bounces 2))
         (+' bounces 1)))))
-
-
-(defn next-bounce [h bounce] (*' h bounce))
 
 (bouncing-balls 10 1 10)
 
