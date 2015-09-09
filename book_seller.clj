@@ -37,7 +37,8 @@
 
 
 (ns bookseller
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [clojure.test :refer :all]))
 
 (defn to-book-map [book-string]
   (let [[code quantity] (s/split book-string #" ")]
@@ -45,7 +46,6 @@
 
 (defn stock-list [list-of-books list-of-cat]
   (let [book-maps (map to-book-map list-of-books)]))
-
 
 (defn tests []
   (assert (= (to-book-map "BBAR 150")
@@ -57,13 +57,11 @@
 
 (tests)
 
-;;(deftest a-test1
-  ;;(testing "Test 1"
-    ;;(def ur ["BBAR 150", "CDXE 515", "BKWR 250", "BTSQ 890", "DRTY 600"])
-    ;;(def vr ["A" "B" "C" "D"])
-    ;;(def res [["A" 0] ["B" 1290] ["C" 515] ["D" 600]])
-    ;;(is (= (stock-list ur vr) res))))
+(deftest a-test1
+  (testing "Test 1"
+    (def ur ["BBAR 150", "CDXE 515", "BKWR 250", "BTSQ 890", "DRTY 600"])
+    (def vr ["A" "B" "C" "D"])
+    (def res [["A" 0] ["B" 1290] ["C" 515] ["D" 600]])
+    (is (= (stock-list ur vr) res))))
 
-;;(a-test1)
-;;
-;;(assert (= 1 2))
+(run-tests)
