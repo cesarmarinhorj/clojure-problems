@@ -153,7 +153,6 @@
 
 (divide milky-way milky-way-blackhole)
 
-
 [[0.5 :px-squared]
  [50.0 :px-squared]
  [15.337423312883436 :in-squared]

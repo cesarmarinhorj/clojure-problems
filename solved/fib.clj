@@ -1,3 +1,4 @@
+;;SOLVED
 (defn fib
   ([til]
    (cond (= til 0) []
@@ -9,3 +10,5 @@
               (conj fib-seq (apply + (take-last 2 fib-seq)))))))
 
 (fib 3)
+(fib 5)
+(fib 10)

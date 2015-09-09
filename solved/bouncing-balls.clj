@@ -1,3 +1,4 @@
+;;SOLVED
 ;;http://www.codewars.com/kata/5544c7a5cb454edb3c000047/train/clojure
 ;;
 ;;A child plays with a ball on the nth floor of a big building the height of which is known
@@ -28,7 +29,8 @@
 ;;
 ;;h = 3, bounce = 1, window = 1.5, result is -1
 
-(ns bouncing-balls.core)
+(ns bouncing-balls.core
+  (:require [clojure.test :refer :all]))
 
 (defn next-bounce [h bounce] (*' h bounce))
 
@@ -44,16 +46,14 @@
 
 (next-bounce 3 0.66)
 
-;;(ns bouncing-balls.core-test
-;;  (:require [clojure.test :refer :all]
-;;            [bouncing-balls.core :refer :all]))
-;;
-;;(deftest a-test1
-;;  (testing "Test 1"
-;;    (def rr 3)
-;;    (is (= (bouncing-balls 3 0.66 1.5) rr))))
-;;
-;;(deftest a-test2
-;;  (testing "Test 2"
-;;    (def rr 15)
-;;        (is (= (bouncing-balls 30 0.66 1.5) rr))))
+(deftest a-test1
+  (testing "Test 1"
+    (def rr 3)
+    (is (= (bouncing-balls 3 0.66 1.5) rr))))
+
+(deftest a-test2
+  (testing "Test 2"
+    (def rr 15)
+        (is (= (bouncing-balls 30 0.66 1.5) rr))))
+
+(run-tests)

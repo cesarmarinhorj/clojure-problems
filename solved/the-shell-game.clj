@@ -1,3 +1,4 @@
+;;SOLVED
 ;;http://www.codewars.com/kata/the-shell-game/clojure
 ;;
 ;;Description:
@@ -21,7 +22,8 @@
 ;;There aren't necessarily only three cups in this game, but there will be at least two. You can assume all swaps are valid, and involve two distinct indices.
 ;;Fundamentals
 
-(ns the-shell-game)
+(ns the-shell-game
+  (:require [clojure.test :refer :all]))
 
 (defn move-once [current-position move]
   (let [[from to] move]
