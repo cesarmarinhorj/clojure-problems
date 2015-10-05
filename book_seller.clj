@@ -40,22 +40,23 @@
   (:require [clojure.string :as s]
             [clojure.test :refer :all]))
 
-(defn to-book-map [book-string]
+(defn in? [value values]
+  (some #(= value %) values))
+
+(defn to-book [book-string]
   (let [[code quantity] (s/split book-string #" ")]
-    {:category (first code) :quantity (read-string quantity)}))
+    {:category (str (first code)) :quantity (read-string quantity)}))
+
+(defn sum-for-category [category books]
+  (reduce + (map #(:quantity %) (filter #(= (:category %) category) books))))
+
+(defn all-sums [books]
+  (let [distinct-categories (into #{} (map :category books))]
+    (map (fn [c] {:category c :quantity (sum-for-category c books)}) distinct-categories)))
 
 (defn stock-list [list-of-books list-of-cat]
-  (let [book-maps (map to-book-map list-of-books)]))
-
-(defn tests []
-  (assert (= (to-book-map "BBAR 150")
-             {:category \B :quantity 150})))
-
-(to-book-map "BBAR 150")
-
-(stock-list ["BBAR 150", "CDXE 515", "BKWR 250", "BTSQ 890", "DRTY 600"] [])
-
-(tests)
+  (let [all (all-sums (map to-book list-of-books))]
+    (into [] (map (fn [book] [(:category book) (:quantity book)]) (filter (fn [book] (in? (:category book) list-of-cat)) all)))))
 
 (deftest a-test1
   (testing "Test 1"
