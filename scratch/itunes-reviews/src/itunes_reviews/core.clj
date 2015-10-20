@@ -24,5 +24,9 @@
         json-response (json/read-json body)]
     (:reviews json-response)))
 
-(spit "page-0.txt" (get-reviews "736683061" "77f6833d423a0b796830518891b462119600cb15" 0))
-(print (slurp "page-0.txt"))
+(spit "adr.txt" (apply str (map #(str (:text %) "\n\n")
+                                   (get-reviews "736683061" "77f6833d423a0b796830518891b462119600cb15" 0))))
+
+
+(spit "te.txt" (apply str (map #(str (:text %) "\n\n")
+                                   (get-reviews "908073488" "77f6833d423a0b796830518891b462119600cb15" 0))))
