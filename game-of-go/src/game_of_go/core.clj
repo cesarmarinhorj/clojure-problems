@@ -10,23 +10,17 @@
                    [:. :. :. :. :.]
                    [:. :. :. :. :.]])
 
-(defn move [board row-pos col-pos turn]
-  {:board (if (empty-at? board row-pos col-pos)
-            (place-in-row-col board row-pos col-pos turn)
-            board)
-   :turn (next-turn turn)})
+(defn empty-at? [board row-pos col-pos]
+  (= (get-in board [row-pos col-pos]) :.))
 
 (defn next-turn [current-turn]
   (if (= current-turn :w) :b :w))
 
-(defn place-in-row-col [board row-pos col-pos turn]
-  (let [row (nth board row-pos)]
-    (assoc board
-           row-pos
-           (assoc row col-pos turn))))
-
-(defn empty-at? [board row-pos col-pos]
-  (= (nth (nth board row-pos) col-pos) :.))
+(defn move [board row-pos col-pos turn]
+  {:board (if (empty-at? board row-pos col-pos)
+            (assoc-in board [row-pos col-pos] turn)
+            board)
+   :turn (next-turn turn)})
 
 (deftest placement
   (testing "simple placement"
