@@ -16,18 +16,33 @@
 (defn next-turn [current-turn]
   (if (= current-turn :w) :b :w))
 
+(defn above [board row-pos col-pos]
+  (get-in board [(dec row-pos) col-pos]))
+
+(defn below [board row-pos col-pos]
+  (get-in board [(inc row-pos) col-pos]))
+
+(defn left [board row-pos col-pos]
+  (get-in board [row-pos (dec col-pos)]))
+
+(defn right [board row-pos col-pos]
+  (get-in board [row-pos (inc col-pos)]))
+
 (defn eye? [board row-pos col-pos turn]
-  (let [above (get-in board [(dec row-pos) col-pos])
-        below (get-in board [(inc row-pos) col-pos])
-        left (get-in board [row-pos (dec col-pos)])
-        right (get-in board [row-pos (inc col-pos)])]
-    (= above below left right (next-turn turn))))
+  (= (above board row-pos col-pos)
+     (below board row-pos col-pos)
+     (left  board row-pos col-pos)
+     (right board row-pos col-pos)
+     (next-turn turn)))
 
 
 (defn move [board row-pos col-pos turn]
-  (if (and (empty-at? board row-pos col-pos) (not (eye? board row-pos col-pos turn)))
+  (if (and (empty-at? board row-pos col-pos)
+           (not (eye? board row-pos col-pos turn)))
+
     {:board (assoc-in board [row-pos col-pos] turn)
      :turn (next-turn turn)}
+
     {:board board :turn turn}))
 
 (deftest hello-world
