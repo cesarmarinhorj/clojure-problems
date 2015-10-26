@@ -10,11 +10,13 @@
                    [:. :. :. :. :.]
                    [:. :. :. :. :.]])
 
+(def turns {:w :b :b :w})
+
 (defn empty-at? [board row-pos col-pos]
   (= (get-in board [row-pos col-pos]) :.))
 
 (defn next-turn [current-turn]
-  (if (= current-turn :w) :b :w))
+  (current-turn turns))
 
 (defn above [board row-pos col-pos]
   (get-in board [(dec row-pos) col-pos]))
@@ -35,15 +37,39 @@
      (right board row-pos col-pos)
      (next-turn turn)))
 
+(defn can-place? [board row-pos col-pos turn]
+  (and (empty-at? board row-pos col-pos)
+       (not (eye? board row-pos col-pos turn))))
+
+(defn place [board row-pos col-pos turn]
+  (assoc-in board [row-pos col-pos] turn))
 
 (defn move [board row-pos col-pos turn]
-  (if (and (empty-at? board row-pos col-pos)
-           (not (eye? board row-pos col-pos turn)))
+  (if (can-place? board row-pos col-pos turn)
 
-    {:board (assoc-in board [row-pos col-pos] turn)
-     :turn (next-turn turn)}
+    {:board (place board row-pos col-pos turn)
+     :turn  (next-turn turn)}
 
-    {:board board :turn turn}))
+    {:board board
+     :turn  turn}))
+
+(defn to-row-col-pos [row-pos col-pos]
+  (if (= col-pos -1)
+    nil
+    [row-pos col-pos]))
+
+(defn future-move [board]
+  (->> board
+       (map-indexed #(to-row-col-pos % (.indexOf %2 :B)))
+       (remove nil?)
+       (first)))
+
+(defn verify-board [from to]
+  (future-move from))
+
+(defn verify-board [board]
+  (let [[row-pos col-pos] (future-move board)]
+    [row-pos col-pos]))
 
 (deftest hello-world
   (testing "simple placement"
@@ -97,4 +123,30 @@
                     [:. :. :b :. :.]]
             :turn :w}))))
 
+(deftest captures
+  (testing "simple capture"
+    (is (= (move [[:. :. :w :. :.]
+                  [:. :w :b :. :.]
+                  [:. :. :w :. :.]] 1 3 :w)
+
+           {:board [[:. :. :w :. :.]
+                    [:. :w :. :w :.]
+                    [:. :. :w :. :.]]
+            :turn :b}))))
+
 (run-tests)
+
+;; (verify-board [[:. :. :b :. :.]
+;;                [:. :b :w :B :.]
+;;                [:. :. :b :. :.]])
+
+;; (defn verify-board [from to])
+
+;; (verify-board [[:. :. :b :. :.]
+;;                [:. :b :w :B :.]
+;;                [:. :. :b :. :.]]
+
+
+;;               [[:. :. :b :. :.]
+;;                [:. :b :. :b :.]
+;;                [:. :. :b :. :.]])
