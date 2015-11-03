@@ -51,8 +51,3 @@
 
     {:board board
      :turn  turn}))
-
-(defn to-row-col-pos [row-pos col-pos]
-  (if (= col-pos -1)
-    nil
-    [row-pos col-pos]))
