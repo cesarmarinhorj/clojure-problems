@@ -2,17 +2,11 @@
   (:require [clojure.test :refer :all]
             [game-of-go.core :refer :all]))
 
-(defn index-of [value col]
-  (let [result (.indexOf col value)]
-    (if (= result -1) nil result)))
-
-(defn to-row-col-pos [row-pos col-pos]
-  (if (not col-pos) nil [row-pos col-pos]))
-
 (defn future-move [board future-turn]
   (->> board
-       (map-indexed (fn [row-pos row] (to-row-col-pos row-pos (index-of future-turn row))))
-       (remove nil?)
+       (to-coordinates)
+       (filter #(= (:piece %) future-turn))
+       (map #(vector (:row-pos %) (:col-pos %)))
        (first)))
 
 (defn remove-future-moves [board]
@@ -83,6 +77,5 @@
                   [[:. :. :w :. :.]
                    [:. :w :. :w :.]
                    [:. :. :w :. :.]] :b)))
-
 
 (run-tests)

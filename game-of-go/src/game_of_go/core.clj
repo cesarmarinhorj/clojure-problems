@@ -9,6 +9,17 @@
                    [:. :. :. :. :.]
                    [:. :. :. :. :.]])
 
+(defn to-coordinates [board]
+  (into []
+   (flatten
+    (map-indexed
+     (fn [row-pos row]
+       (map-indexed
+        (fn [col-pos piece]
+          {:row-pos row-pos
+           :col-pos col-pos
+           :piece piece}) row)) board))))
+
 (def turns {:w :b :b :w})
 
 (defn empty-at? [board row-pos col-pos]
