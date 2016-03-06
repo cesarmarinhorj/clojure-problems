@@ -62,6 +62,54 @@
     (sort-by #(:date %)
              (into [] (map to-date-record (:ranks paid-feed))))))
 
-(get-reviews "736683061" "77f6833d423a0b796830518891b462119600cb15" 0)
-(get-features "736683061" "77f6833d423a0b796830518891b462119600cb15" 0 "2013-11-01" "2013-11-30")
-(get-ranks "736683061" "77f6833d423a0b796830518891b462119600cb15" 0 "2014-01-01" "2014-12-31")
+(def adr "736683061")
+(def anc "977865620")
+(def te "908073488")
+(def auth-token "77f6833d423a0b796830518891b462119600cb15")
+
+(spit "anc-rank.txt" (get-ranks anc auth-token 0 "2013-01-01" "2016-12-31"))
+(spit "adr-rank.txt" (get-ranks adr auth-token 0 "2013-01-01" "2016-12-31"))
+(spit "te-rank.txt" (get-ranks te auth-token 0 "2013-01-01" "2016-12-31"))
+
+(defn avg [numbers]
+  (/ (apply + numbers) (count numbers)))
+
+(defn revenue-for-date [date]
+  (first (filter #(= (:date %) date) (read-string (slurp "app-revenue.txt")))))
+
+(defn revenue-for-date-app [date app]
+  (let [revenue (:revenue (revenue-for-date date))]
+    (case app
+      :anc (nth revenue 0)
+      :te  (nth revenue 1)
+      :adr (nth revenue 2))))
+
+(defn downloads-for-date-app [date app]
+  (int (/ (revenue-for-date-app date app) 0.7)))
+
+(defn rank-from-file [date file]
+  (:rank (first (filter #(= (:date %) date) (read-string (slurp file))))))
+
+(defn rank-for-date-app [date app]
+  (case app
+    :anc (rank-from-file date "anc-rank.txt")
+    :te (rank-from-file date "te-rank.txt")
+    :adr (rank-from-file date "adr-rank.txt")))
+
+(defn downloads-for-rank [rank]
+  (let [adr-ranks (read-string (slurp "adr-rank.txt"))
+        anc-ranks (read-string (slurp "anc-rank.txt"))
+        te-ranks  (read-string (slurp "te-rank.txt"))]
+        adr-ranks))
+
+
+(rank-for-date-app :2016-01-01 :anc)
+(read-string (slurp "anc-rank.txt"))
+(read-string (slurp "adr-rank.txt"))
+(read-string (slurp "te-rank.txt"))
+(read-string (slurp "app-revenue.txt"))
+(downloads-for-date-app :2015-01-01 :adr)
+(downloads-for-date-app :2015-01-01 :te)
+(downloads-for-date-app :2015-01-01 :te)
+(revenue-for-date-app :2015-01-01 :te)
+(revenue-for-date :2015-01-01)
